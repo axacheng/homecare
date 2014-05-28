@@ -1,0 +1,35 @@
+application: homecare-prod
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+
+handlers:
+- url: /_ah/spi/.*
+  script: api.rpi_api.application
+
+- url: /.*
+  script: helloworld.application
+
+
+builtins:
+- appstats: on
+- remote_api: on
+
+
+libraries:
+- name: jinja2
+  version: latest
+
+- name: PIL
+  version: latest
+
+- name: endpoints
+  version: latest
+
+- name: webapp2
+  version: latest
+
+- name: ssl
+  version: latest
