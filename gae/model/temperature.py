@@ -18,3 +18,10 @@ class Temperature(ndb.Model):
     return cls(current_temperature = current_temperature,
                parent = ndb.Key(cls, user_id),
                user_id = user_id).put()
+
+
+  @classmethod
+  def QueryCurrentTemperature(cls, populate_data):
+    user_id = populate_data.get('user_id')
+    temp_parent = ndb.Key(cls, user_id)
+    return cls.query(ancestor=temp_parent).order(-cls.ctime).fetch(1)
