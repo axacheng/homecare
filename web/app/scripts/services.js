@@ -28,26 +28,26 @@ angular.module('Web.services', ['homecareConstant', 'ngResource'])
 
 .factory('TemperatureService', ['homecare_prod_constant', '$resource',
   function(homecare_prod_constant, $resource) {
+    var temperatureObject = []
     return {
-      readTemperature: function(){
-        // https://docs.angularjs.org/api/ngResource/service/$resource
-        return $resource(homecare_prod_constant.readTemperatureUrl,
-                         {},
-                         { query: {method:'GET',
-                                   params:{user_id:'user_id'},
-                                   isArray:true}
-        });
-      },
-      // readmymessage_more: function(){
-      //   return $resource(homecare_prod_constant.readmymessageUrl,
-      //                    {},
-      //                    { query: {method:'GET',
-      //                              params:{access_key:'access_key',
-      //                                      page:'page'},
-      //                              isArray:true}
-      //   });
-      // },
+      queryTemperature: function(userId){
+        /*
+          TemperatureService.queryTemperature()
+    .get({user_id:$stateParams.userId})
+      .$promise.then(function(endpoint_return){
+        $scope.temperature = endpoint_return.items[0].current_temperature;
+        $scope.current_time = endpoint_return.items[0].ctime;
+  });
+*/
+
+        var Temperature = $resource(homecare_prod_constant.queryTemperatureUrl);
+        return Temperature.get({user_id:userId}).$promise;
+        //return Temperature.get({user_id:userId}).$promise.then();
+        //return Temperature.get({user_id:userId}).$promise
+            //console.log(endpoint_return);
+            //return endpoint_return;
+            //return 99;
+      }
     };
   }
-])
-
+]);
