@@ -12,7 +12,7 @@ angular.module('homecareConstant', [])
 .constant('homecare_prod_constant', {
   //accessKey:'axatest',
   //gcmAppID:'1060962448908',
-  queryTemperatureUrl:'http://192.168.0.106:8080/_ah/api/homecare/v1/queryTemperature',
+  queryTemperatureUrl:'https://homecare-prod.appspot.com/_ah/api/homecare/v1/queryTemperature',
 });
 
 
@@ -42,7 +42,7 @@ angular.module('Web', ['ionic', 'Web.services', 'Web.controllers'])
       views: {
         'mainContent': {
           templateUrl: 'templates/main-list.html',
-          controller: ''
+          controller: 'MainListCtrl'
         }
       }
     })
