@@ -1,0 +1,53 @@
+queue:
+- name: default
+  rate: 1/s
+
+- name: First-Point-Detector
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Chart-NewUser
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-Case-UserMessageHistory
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-CancelCase-UserMessageHistory
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-CancelBuy-UserMessageHistory
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-Delivery-UserMessageHistory
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-ToGo-UserMessageHistory
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Send-Promotion-Message
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-GiftQueue
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0
+
+- name: Add-Store
+  rate: 1/m
+  retry_parameters:
+    task_retry_limit: 0

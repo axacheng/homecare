@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
+import datetime
 import endpoints
+import logging
+import RPi.GPIO as GPIO
+
 
 from model import temperature
 from protorpc import messages
@@ -20,8 +24,42 @@ class TemperatureMessageResponse(messages.Message):
   status = messages.StringField(3)
 
 
+class LightMessageRequest(messages.Message):
+  pin = message_types.DateTimeField(1)
+  action = messages.StringField(2)
+
+class LightMessageResponse(messages.Message):
+  errmsg = messages.StringField(1)
+  items = messages.MessageField(LightMessageRequest, 2, repeated=True)
+  status = messages.StringField(3)
+
 @endpoints.api(name='homecare', version='v1', description='RPI Endpoints API')
 class HomeCareApi(remote.Service):
+
+  @endpoints.method(LightMessageRequest,
+                    LightMessageResponse,
+                    name='control lighting',
+                    path='controlLighting',
+                    http_method='GET')
+  def controlLighting(self, request):
+    populate_data = {}
+    populate_data['pin'] = request.pin
+    populate_data['action'] = request.action
+
+    ### Setup GPIO-0(aka:pin 11)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(populate_data.get('pin'), GPIO.OUT)
+    
+    if populate_data.get('action') == 'on':
+      GPIO.output(11, GPIO.HIGH)
+
+    elif populate_data.get('action') == 'off':
+      GPIO.output(11, GPIO.LOW)
+
+    return LightMessageResponse(items=[LightMessageRequest(pin='', action='')],
+                                      status='ok', errmsg='')
+
+
   @endpoints.method(TemperatureMessageRequest,
                     TemperatureMessageResponse,
                     name='add temperature',
@@ -55,7 +93,10 @@ class HomeCareApi(remote.Service):
     if entities:
       def message_result():
         for entity in entities:
-          yield TemperatureMessageRequest(ctime=entity.ctime,
+          #asia_taipei_time = datetime.datetime.strptime(entity.ctime, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=8.0)
+          asia_taipei_time = entity.ctime + datetime.timedelta(hours=8.0)
+
+          yield TemperatureMessageRequest(ctime=asia_taipei_time,
                                           current_temperature=entity.current_temperature,
                                           user_id=entity.user_id)
 
