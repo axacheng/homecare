@@ -1,0 +1,54 @@
+<html>
+  <header>
+    <script type="text/javascript" src="http://9.ihome-prod.appspot.com/_ah/channel/jsapi"></script>
+    <!--<script type="text/javascript" src="http://localhost:8080/_ah/channel/jsapi"></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </header>
+
+  <body>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        // Display message to web
+        function add_message(message) {
+          if (message.gear_type) {
+            $('#message').append('<br>Gear Type:' + message.gear_type)
+            $('#message').append('<br>Action:' + message.action)
+            $('#message').append('<br>GPIO_PIN:' + message.gpio_pin)            
+          }
+          else {
+            $('#message').append(message)
+          }
+        }
+
+
+        // Get token from ihome-prod-gae Channel API
+        var channel_id = $('#rpi_id').text()
+        var token = $('#token').text()
+        add_message('Step1: Get issued token from ihome-prod-gae.<br>');
+
+        // Open channel and listen to that channel
+        channel = new goog.appengine.Channel(token);
+          socket = channel.open();
+          socket.onopen = function(){
+            add_message('Step2: Channel established and listening to stream passing by.');
+          }
+          
+          socket.onmessage = function(message) {
+            var message_data = jQuery.parseJSON(message.data)
+
+            add_message('Step3: Received message:' + message_data)
+            $.get("http://localhost:5000/cgi/" + message_data.gear_type, function(data){
+              console.log(data)
+            })
+
+            add_message(message_data)
+          }
+
+      })
+    </script>
+    RPI_ID:<div id="rpi_id">{{ rpi_id }}</div>
+    Token:<div id="token">{{ token }}</div><br>
+    Message:<div id="message"></div>
+  </body>
+</html>
+

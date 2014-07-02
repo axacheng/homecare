@@ -1,0 +1,49 @@
+<html>
+  <header>
+	<script type="text/javascript" src="http://9.ihome-prod.appspot.com/_ah/channel/jsapi"></script>
+  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </header>
+
+  <body>
+  	<script type="text/javascript">
+  		$(document).ready(function(){
+  			//var token = $('#token').text()
+        var token = 'AHRlWrrRR0odNlNwRKHGkQaLEC12TShGiGctwCwmz2mW8sMXoHd0epMwN5YHVC06Y_B09uHzwM5qxSw6yJu28CkqYJONxR1lfMg8OidB_bBGaxqHfjkN1y4'
+	  		console.log(token)
+
+	  		// fn 
+	  		function add_message(message) {
+          if (message.type) {
+            $('#message').append('<br>Type:' + message.type)
+            $('#message').append('<br>Action:' + message.action)
+            $('#message').append('<br>GPIO_PIN:' + message.gpio_pin)            
+          }
+          else {
+            $('#message').append(message)
+          }
+	  		}
+
+
+	  		//
+	  		channel = new goog.appengine.Channel(token);
+      		socket = channel.open();
+      		socket.onopen = function(){
+      			add_message('Channel established.');
+      		}
+      		
+      		socket.onmessage = function(message) {
+      			var message_data = jQuery.parseJSON(message.data)
+
+            console.log('received message:' + message_data)
+            $.get("http://localhost:5000/cgi")
+
+      			add_message(message_data)
+      		}
+
+  		})
+  	</script>
+  	Token:<div id="token">{{ token }}</div><br>
+  	Message:<div id="message"></div>
+  </body>
+</html>
+
