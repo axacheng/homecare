@@ -13,6 +13,7 @@ angular.module('homecareConstant', [])
   //accessKey:'axatest',
   //gcmAppID:'1060962448908',
   queryTemperatureUrl:'https://homecare-prod.appspot.com/_ah/api/homecare/v1/queryTemperature',
+  //queryTemperatureUrl:'http://localhost:8080/_ah/api/homecare/v1/queryTemperature',
 });
 
 

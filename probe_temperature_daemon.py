@@ -10,10 +10,10 @@ from daemon import runner
 
 DS18B20_PATH = '/sys/bus/w1/devices/28-000005b89736'
 CMD = """cat %s/w1_slave |grep -o t=.* | cut -d '=' -f 2""" % DS18B20_PATH
-#URL = 'http://192.168.0.106:8080/_ah/api/homecare/v1/addTemperature'
+#URL = 'http://localhost:8080/_ah/api/homecare/v1/addTemperature'
 URL = 'https://homecare-prod.appspot.com/_ah/api/homecare/v1/addTemperature'
 USER_ID = 'axa'
-TIMES = 60  # 1 minute (60 seconds)
+TIMES = 600 # 1 minute (60 seconds)
 
 
 class App():
@@ -21,7 +21,7 @@ class App():
       self.stdin_path = '/dev/null'
       self.stdout_path = '/dev/tty'
       self.stderr_path = '/dev/tty'
-      self.pidfile_path =  '/tmp/foo.pid'
+      self.pidfile_path =  '/tmp/probe_temperature_daemon.pid'
       self.pidfile_timeout = 5
   
   def run(self):
@@ -32,7 +32,7 @@ class App():
       payload = {}
       payload['current_temperature'] = str(temperature)
       payload['user_id'] = USER_ID
-      
+
       headers = {'content-type': 'application/json'}
       response = requests.post(URL, data=json.dumps(payload), headers=headers)
       print response.text
